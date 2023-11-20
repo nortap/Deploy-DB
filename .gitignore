@@ -1,5 +1,4 @@
 .iso
 .vscode
 inventory
-env.yaml
 ansible.cfg

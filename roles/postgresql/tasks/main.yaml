@@ -2,11 +2,7 @@
 # Install PostgreSQL along with psycopg2-binary Python library that will
 # allow us to use Ansible PostgreSQL modules.
 
-- hosts: all
-  become: yes
-
-  vars_files:
-    - vars.yaml
+- hosts: postgres
 
   pre_tasks:
     - name: "Install Postgres Packages"
