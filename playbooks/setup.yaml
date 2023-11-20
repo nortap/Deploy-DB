@@ -1,0 +1,10 @@
+---
+
+- hosts: localhost
+  tags: localhost
+  connection: local
+  become: false
+  gather_facts: true
+  roles:
+    - set_inventory
+    

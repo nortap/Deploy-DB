@@ -1,0 +1,4 @@
+# Auto detect text files and perform LF normalization
+* text=Auto
+*.yaml linguist-detectable=true
+*.yaml linguist-language=YAML
