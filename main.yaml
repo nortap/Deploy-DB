@@ -1,14 +1,18 @@
-- hosts: localhost
-  tags: setup
-  connection: local
-  become: true
-  gather_facts: yes
-  vars_files:
-    - env.yaml
+---
+# Install PostgreSQL along with psycopg2-binary Python library that will
+# allow us to use Ansible PostgreSQL modules.
 
-- hosts: postgresdb
-  tags: postgres
-  become: true
-  gather_facts: yes
-  roles:
-    - postgresql
+- name: Talk to all host so we can learn about them
+  hosts: all
+  tasks:
+
+    - name: classify hosts depending on distribution
+      ansible.builtin.group_by:
+        key: os_{{ ansible_facts['distribution'] }}
+
+- hosts: os_Ubuntu
+  gather_facts: False
+  tasks:
+
+    - name: Ping my Ubuntu hosts
+      ansible.builtin.ping:

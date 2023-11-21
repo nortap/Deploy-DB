@@ -1,0 +1,36 @@
+---
+
+- hosts: psql
+  become: true
+  vars:
+    db_user: dbusername
+    db_name: psql1
+    db_password: dbpassword
+
+  tasks:
+  
+  - name: Update repository index
+    apt:
+      update_cache: yes
+
+  - name: Install dependencies for PostgreSQL
+    apt: name={{ item }} update_cache=true state=latest
+    with_items:
+    - bash
+    - openssl
+    - libssl-dev
+    - libssl-doc
+  
+  - name: Install PostgreSQL
+    apt: name={{ item }} update_cache=true state=present
+    with_items:
+    - postgresql
+    - postgresql-contrib
+    - libpq-dev
+    - python3-psycopg2
+
+  - name: Ensure the PostgreSQL service is running
+    service: name=postgresql state=started enabled=yes
+
+
+  

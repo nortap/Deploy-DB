@@ -2,7 +2,7 @@
 # Install PostgreSQL along with psycopg2-binary Python library that will
 # allow us to use Ansible PostgreSQL modules.
 
-- hosts: postgres
+- hosts: postgresql
 
   pre_tasks:
     - name: "Install Postgres Packages"
@@ -35,3 +35,5 @@
     - name: restart postgres
       service: name=postgresql state=restarted
       
+  roles:
+    - postgresql
