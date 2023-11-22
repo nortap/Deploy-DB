@@ -9,28 +9,73 @@
 
   tasks:
   
-  - name: Update repository index
+  - name: Update repository index for Debian
     apt:
       update_cache: yes
+    when: ansible_distribution == "Debian"
 
-  - name: Install dependencies for PostgreSQL
+  - name: Install dependencies for PostgreSQL for Debian
     apt: name={{ item }} update_cache=true state=latest
+    when: ansible_distribution == "Debian"
     with_items:
     - bash
     - openssl
     - libssl-dev
     - libssl-doc
   
-  - name: Install PostgreSQL
+  - name: Install PostgreSQL for Debian
     apt: name={{ item }} update_cache=true state=present
+    when: ansible_distribution == "Debian"
     with_items:
     - postgresql
     - postgresql-contrib
     - libpq-dev
     - python3-psycopg2
 
+  - name: Update repository index for CentOS
+    dnf: 
+      update_cache: yes
+    when: ansible_distribution == "CentOS"
+
+  - name: Install dependencies for PostgreSQL for CentOS
+    dnf: name={{ item }} update_cache=true state=latest
+    when: ansible_distribution == "CentOS"
+    with_items:
+    - bash
+    - openssl
+    - openssl-devel
+  
+  - name: Install PostgreSQL for CentOS
+    dnf: name={{ item }} update_cache=true state=present
+    when: ansible_distribution == "CentOS"
+    with_items:
+    - postgresql-server
+    - postgresql-contrib
+    - libpq-devel
+    - python3-psycopg2
+  
+  - name: "Find out if PostgreSQL is initialized"
+    ansible.builtin.stat:
+      path: "/var/lib/pgsql/data/pg_hba.conf"
+    register: postgres_data
+
+  - name: "Initialize PostgreSQL"
+    shell: "/usr/bin/postgresql-setup initdb"
+    when: not postgres_data.stat.exists and ansible_distribution == "CentOS"
+
+  - name: Populate service facts
+    ansible.builtin.service_facts:
+
+
   - name: Ensure the PostgreSQL service is running
-    service: name=postgresql state=started enabled=yes
+    service:
+      name: postgresql
+      state: started
+      enabled: yes
+
+# - name: Ensure the PostgreSQL service is running
+#   service: name=postgresql state=started enabled=yes
+
 
 
   
