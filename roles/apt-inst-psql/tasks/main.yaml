@@ -1,0 +1,21 @@
+- name: Install dependencies for PostgreSQL for Ubuntu
+  apt: 
+    name={{ item }} 
+    state=latest
+  when: ansible_distribution == "Ubuntu"
+  with_items:
+  - bash
+  - openssl
+  - libssl-dev
+  - libssl-doc
+  
+- name: Install PostgreSQL for Ubuntu
+  apt: 
+    name={{ item }} 
+    state=present
+  when: ansible_distribution == "Ubuntu"
+  with_items:
+  - postgresql
+  - postgresql-contrib
+  - libpq-dev
+  - python3-psycopg2

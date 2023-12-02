@@ -1,0 +1,16 @@
+---
+
+- hosts: mongo-apt
+  become: true
+  vars:
+    db_user: dbuser
+    db_name: big-boy
+    db_password: password
+    mongoDB_Port: 27017
+
+  roles:
+  - base                    # base role refreshes repositories for Ubuntu and CentOS
+  - apt-inst-mongo          # apt-inst installs MongoDB on Ubuntu systems
+#  - dnf-inst-mongo          # dnf-inst installs MongoDB on CentOS systems
+  - post-mongo              # Post installation tasks to create and verify test DB
+

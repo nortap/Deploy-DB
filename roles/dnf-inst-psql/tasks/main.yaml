@@ -1,0 +1,26 @@
+- name: Install dependencies for PostgreSQL for CentOS
+  dnf: name={{ item }} update_cache=true state=latest
+  when: ansible_distribution == "CentOS"
+  with_items:
+  - bash
+  - openssl
+  - openssl-devel
+ 
+- name: Install PostgreSQL for CentOS
+  dnf: name={{ item }} update_cache=true state=present
+  when: ansible_distribution == "CentOS"
+  with_items:
+  - postgresql-server
+  - postgresql-contrib
+  - libpq-devel
+  - python3-psycopg2
+
+- name: "Find out if PostgreSQL is initialized on CentOS"
+  ansible.builtin.stat:
+    path: "/var/lib/pgsql/data/pg_hba.conf"
+  register: postgres_data
+
+- name: "Initialize PostgreSQL"
+  shell: "/usr/bin/postgresql-setup initdb"
+  when: not postgres_data.stat.exists and ansible_distribution == "CentOS"
+  

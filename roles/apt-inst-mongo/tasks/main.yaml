@@ -1,0 +1,33 @@
+- name: Install dependencies for MongoDB for Ubuntu
+  apt: 
+    name={{ item }} 
+    state=latest
+  when: ansible_distribution == "Ubuntu"
+  with_items:
+  - gnupg
+  - curl
+  - rpm
+
+- name: Add MongoDB apt signing key
+  apt_key: 
+    url: https://pgp.mongodb.com/server-7.0.asc
+    keyring: /usr/share/keyrings/mongodb-server-7.0.gpg
+    state: present
+
+- name: Add mongodb repository to sources list
+  apt_repository:
+    repo: deb https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/7.0 multiverse
+
+- name: Create mongodb-org-7.0 repo list
+  command: echo "deb [ arch=amd64 signed-by=/usr/share/keyrings/mongodb-server-7.0.gpg ] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/7.0 multiverse"
+
+- name: Update cache with new list
+  apt: 
+    update_cache: true
+
+- name: Install mongodb
+  apt:
+    name: mongodb-org
+    update_cache: true
+    state: present
+

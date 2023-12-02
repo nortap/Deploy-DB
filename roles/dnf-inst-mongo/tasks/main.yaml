@@ -1,0 +1,16 @@
+- name: Copy Repo file to /etc/yum.repos.d
+  copy:
+    src: mongo7.repo.x86.template
+    dest: /etc/yum.repos.d/mongodb-org-7.0.repo platform=CentOS
+    owner: root
+    group: root
+    mode: '0644'
+    force: false
+    
+
+- name: Install the latest version of MongoDB 
+  dnf:
+    name: mongodb-org
+    update_cache: true
+    state: latest
+
