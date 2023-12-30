@@ -1,7 +1,19 @@
+vars:
+  db_user: dbuser
+  db_name: big-boy
+  db_password: password
+  mongoDB_Port: 27017
+
+- name: Set host architecture
+  gather_facts: true
+  tasks:
+  debug: var= ansible_architecture
+  
+
 - name: Copy Repo file to /etc/yum.repos.d
   copy:
     src: mongo7.repo.x86.template
-    dest: /etc/yum.repos.d/mongodb-org-7.0.repo platform=CentOS
+    dest: /etc/yum.repos.d/mongodb-org-7.0.repo platform="CentOS"
     owner: root
     group: root
     mode: '0644'

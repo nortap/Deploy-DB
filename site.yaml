@@ -1,0 +1,20 @@
+---
+
+- hosts: all
+  become: true
+  roles:
+    - base
+
+- hosts: psql
+  become: true
+  roles:
+    - apt-inst-psql
+    - dnf-inst-psql
+    - post-psql
+
+- hosts: mongo
+  become: true
+  roles:
+    - apt-inst-mongo
+    - dnf-inst-mongo
+    - post-mongo

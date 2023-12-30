@@ -1,3 +1,9 @@
+vars:
+  db_user: dbuser
+  db_name: big-boy
+  db_password: password
+  mongoDB_Port: 27017
+
 - name: Ensure the PostgreSQL service is running
   service:
     name: postgresql
